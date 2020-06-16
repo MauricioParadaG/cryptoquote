@@ -26,28 +26,26 @@ const SelectFiat = styled.select`
 /////////////////////////////////////////////////
 
 
-const useFiat = () => {
+const useFiat = (labelFiat, inicialState, optionsFiat) => {
 
-    const [state, setState] = useState('');
+    const [state, setState] = useState(inicialState);
 
     const Select = () => (
         <>
-          <Label>Choose your currency</Label>
+          <Label>{labelFiat}</Label>
           <SelectFiat
-          //  onChange={onChangeForm}
-          //  value={searchCoin.fiat}
+            onChange={event => setState(event.target.value)}
+            value={state}
           >
             <option value="">- Select -</option>
-            <option value="COP">Peso Colombiano</option>
-            <option value="DE">Deutschland</option>
-            <option value="US">United States</option>
-            <option value="MXN">Peso Mexicano</option>
-            <option value="ES">España</option>
+            {optionsFiat.map(option => (
+              <option key={option.code} value={option.code}>{option.name}</option>
+            ))}
           </SelectFiat>
         </>
     );
 
-    return [state, setState, Select];
+    return [state, Select];
 
 }
 
