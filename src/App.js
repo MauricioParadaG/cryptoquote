@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from '@emotion/styled';
 import image from './cryptoPic.png';
 import FormComponent from './components/Form.component';
+import axios from 'axios';
+
 
 const AppContainer = styled.div`
   max-width: 900px;
@@ -46,10 +48,25 @@ const Heading = styled.h1`
 
 function App() {
 
-  const [formSearched, setFormSearchedState] = useState({
-    fiat:'',
-    crypto:''
-  });
+  const [formFiatSearched, setFormFiatSearchedState] = useState('');
+
+  const [formCryptoSearched, setFormCryptoSearchedState] = useState('');
+
+
+  useEffect(() => {
+    if(formFiatSearched ==='') return;
+
+    const askingPriceApi = async () =>{
+            
+      const res = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${formCryptoSearched}&tsyms=${formFiatSearched}`);
+
+      console.log(res.data.DISPLAY[formCryptoSearched][formFiatSearched]);
+      //setListCryptoState(res.data.Data);
+    }
+      askingPriceApi();
+
+  }, [formFiatSearched, formCryptoSearched]);
+
 
   return (
     <AppContainer>
@@ -65,7 +82,8 @@ function App() {
           Quote your Crytocurrency V1.0
         </Heading>
         <FormComponent
-        
+        setFormFiatSearchedState={setFormFiatSearchedState}
+        setFormCryptoSearchedState={setFormCryptoSearchedState}
         />
       </div>
       

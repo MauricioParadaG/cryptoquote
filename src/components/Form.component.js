@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import useFiat from '../hooks/useFiat.hook';
 import useCrypto from '../hooks/useCrypto.hook';
 import axios from 'axios';
+import ErrorComponent from './Error.component';
 
 const ButtonForm = styled.input`
    margin-top: 20px;
@@ -30,7 +31,7 @@ const ButtonForm = styled.input`
 
 
 
-const FormComponent = () => {
+const FormComponent = props => {
 
     const [listCrypto, setListCryptoState] = useState([]);
 
@@ -47,6 +48,9 @@ const FormComponent = () => {
 
     const [cryptoCoin, SelectYourCrypto] = useCrypto('Choose your Cryptocurrency','', listCrypto);
 
+    //Error
+    const [error, setErrorState] = useState(false);
+
     // Consuming API 
     useEffect(() => {
 
@@ -61,8 +65,31 @@ const FormComponent = () => {
 
 
 
+    const onSubmit = event => {
+        event.preventDefault();
+
+    // validation
+    if (fiat.trim() ==='' || 
+        cryptoCoin.trim() ==='' ){
+        setErrorState(true);
+        return;
+    } 
+     setErrorState(false);
+
+     props.setFormFiatSearchedState(fiat);
+     props.setFormCryptoSearchedState(cryptoCoin);
+    }
+
+
+
     return (
-        <form>
+        <form onSubmit={onSubmit}>
+         {/** if - error message with .css*/}
+         {error ?
+            <ErrorComponent message="All filds are required"/>
+            : null
+        }
+
             <SelectYourFiat/>
             <SelectYourCrypto/>
 

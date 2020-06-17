@@ -39,9 +39,9 @@ const useCrypto = (labelCrypto, inicialState, optionsCrypto) => {
             value={state}
           >
             <option value="">- Select -</option>
-            {/*optionsCrypto.map(option => (
-              <option key={option.code} value={option.code}>{option.name}</option>
-            ))*/}
+            {optionsCrypto.map(option => (
+              <option key={option.CoinInfo.Id} value={option.CoinInfo.Name}>{option.CoinInfo.FullName}</option>
+            ))}
           </SelectCrypto>
         </>
     );
