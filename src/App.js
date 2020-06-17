@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import image from './cryptoPic.png';
 import FormComponent from './components/Form.component';
 import axios from 'axios';
+import QuotationComponent from './components/Quotation.component';
+import SpinnerComponent from './components/Spinner.component';
 
 
 const AppContainer = styled.div`
@@ -52,6 +54,10 @@ function App() {
 
   const [formCryptoSearched, setFormCryptoSearchedState] = useState('');
 
+  const [apiAnswer, setApiAnswerState] = useState({});
+
+  const [loadingSpinner, setLoadingSpinnerState] = useState(false);
+
 
   useEffect(() => {
     if(formFiatSearched ==='') return;
@@ -60,12 +66,29 @@ function App() {
             
       const res = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${formCryptoSearched}&tsyms=${formFiatSearched}`);
 
-      console.log(res.data.DISPLAY[formCryptoSearched][formFiatSearched]);
-      //setListCryptoState(res.data.Data);
+      // Spinner
+      setLoadingSpinnerState(true);
+      
+      setTimeout(() => {
+        setLoadingSpinnerState(false);
+        
+        // save here in App.js state
+        setApiAnswerState(res.data.DISPLAY[formCryptoSearched][formFiatSearched]);
+
+    }, 1600);
+
     }
       askingPriceApi();
 
   }, [formFiatSearched, formCryptoSearched]);
+
+  // showing or not the spinner, second way.
+  const showComponentorSpinner = (loadingSpinner) ?
+       <SpinnerComponent/> 
+        :
+        <QuotationComponent
+        apiAnswerState={apiAnswer}
+        />
 
 
   return (
@@ -85,6 +108,9 @@ function App() {
         setFormFiatSearchedState={setFormFiatSearchedState}
         setFormCryptoSearchedState={setFormCryptoSearchedState}
         />
+
+        {showComponentorSpinner}
+
       </div>
       
     </AppContainer>

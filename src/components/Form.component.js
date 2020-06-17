@@ -68,16 +68,17 @@ const FormComponent = props => {
     const onSubmit = event => {
         event.preventDefault();
 
-    // validation
-    if (fiat.trim() ==='' || 
-        cryptoCoin.trim() ==='' ){
-        setErrorState(true);
-        return;
-    } 
-     setErrorState(false);
+        // validation
+        if (fiat.trim() ==='' || 
+            cryptoCoin.trim() ==='' ){
+            setErrorState(true);
+            return;
+        } 
+        setErrorState(false);
 
-     props.setFormFiatSearchedState(fiat);
-     props.setFormCryptoSearchedState(cryptoCoin);
+        props.setFormFiatSearchedState(fiat);
+        props.setFormCryptoSearchedState(cryptoCoin);
+
     }
 
 
